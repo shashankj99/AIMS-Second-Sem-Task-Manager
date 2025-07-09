@@ -1,3 +1,5 @@
+import json
+
 tasks = []
 
 
@@ -6,6 +8,10 @@ def add_task(title):
 
 
 def list_tasks():
+    if len(tasks) == 0:
+        print("No tasks found")
+        return
+        
     for i, task in enumerate(tasks):
         status = "✅" if task["Completed"] else "❌"
         print(f"{i+1}. {task['Title']} [{status}]")
@@ -18,27 +24,32 @@ def complete_task(index):
         print("Invalid task index")
 
 
-add_task("Take Shower")
-add_task("Abdcdefgh")
-add_task("Ijklmnop")
-add_task("Qrstuvwx")
-add_task("Yz")
-add_task("Aa")
-add_task("Bb")
-add_task("Cc")
-add_task("Dd")
-add_task("Ee")
-add_task("Ff")
-add_task("Gg")
+def delete_task(index):
+    if 0 <= index < len(tasks):
+        tasks.pop(index)
+    else:
+        print("Invalid task index")
 
-print("Before completing task\n")
 
+def save_tasks():
+    with open("tasks.json", "w") as f:
+        json.dump(tasks, f)
+
+
+def load_tasks():
+    global tasks
+    try:
+        with open("tasks.json", "r") as f:
+            tasks = json.load(f)
+    except FileNotFoundError:
+        tasks = []
+
+
+load_tasks()
 list_tasks()
 
-complete_task(0)
-complete_task(3)
-complete_task(6)
+save_tasks()
 
-print("\nAfter completing task\n")
+# print("\nAfter completing task\n")
 
-list_tasks()
+# list_tasks()
